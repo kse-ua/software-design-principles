@@ -2,12 +2,15 @@
 
 var container = new DiContainer();
 // 1. register dependencies
-container.Register<IFirstInterface, FirstImplementation>();
-container.Register<ISecondInterface, SecondImplementation>();
+container.Register<IFirstInterface, FirstImplementation>(Scope.Singleton);
+container.Register<ISecondInterface, SecondImplementation>(Scope.Transient);
 
 // 2. Create instances
-var first = container.Resolve<IFirstInterface>();
-var second = container.Resolve<ISecondInterface>();
+var firstA = container.Resolve<IFirstInterface>();
+var firstB = container.Resolve<IFirstInterface>();
+var secondA = container.Resolve<ISecondInterface>();
+var secondB = container.Resolve<ISecondInterface>();
+
 Console.WriteLine();
 
 interface IFirstInterface
@@ -17,6 +20,10 @@ interface IFirstInterface
 
 class FirstImplementation : IFirstInterface
 {
+    public override string ToString()
+    {
+        return $"{GetHashCode()}";
+    }
 }
 
 
@@ -32,6 +39,11 @@ class SecondImplementation : ISecondInterface
     public SecondImplementation(IFirstInterface firstInterface)
     {
         this.firstInterface = firstInterface;
+    }
+    
+    public override string ToString()
+    {
+        return $"{GetHashCode()}";
     }
 
 
