@@ -20,6 +20,13 @@ interface IFirstInterface
 
 class FirstImplementation : IFirstInterface
 {
+    private ISecondInterface secondInterface;
+
+    public FirstImplementation(ISecondInterface secondInterface)
+    {
+        this.secondInterface = secondInterface;
+    }
+
     public override string ToString()
     {
         return $"{GetHashCode()}";

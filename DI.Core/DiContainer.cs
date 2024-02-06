@@ -23,27 +23,40 @@ public class DiContainer : IDiContainer
         return (T)Resolve(typeof(T));
     }
     
-    public object Resolve(Type interfaceType)
+    public object Resolve(Type type)
     {
-        var binding = types[interfaceType];
-        if (binding.ImplementationObject != null)
-        {
-            return binding.ImplementationObject;
-        }
+        return ResolveInternal(type, new List<Type>());
 
-        var constructor = binding.ImplementationType.GetConstructors().First();
-        var parameters = new List<object>();
-        foreach (var parameter in constructor.GetParameters())
+        object ResolveInternal(Type interfaceType, List<Type> resolutionsChain)
         {
-            parameters.Add(Resolve(parameter.ParameterType));
-        }
+            var binding = types[interfaceType];
+            if (binding.ImplementationObject != null)
+            {
+                return binding.ImplementationObject;
+            }
 
-        var instance = constructor.Invoke(parameters.ToArray());
-        if (binding.Scope == Scope.Singleton)
-        {
-            binding.ImplementationObject = instance;
+            if (resolutionsChain.Contains(interfaceType))
+            {
+                throw new Exception(
+                    $"Cyclic dependency found during resolution of {type}: {string.Join(",", resolutionsChain.Select(t => t.Name))}. " +
+                    $"Got {interfaceType} again");
+            }
+            resolutionsChain.Add(interfaceType);
+
+            var constructor = binding.ImplementationType.GetConstructors().First();
+            var parameters = new List<object>();
+            foreach (var parameter in constructor.GetParameters())
+            {
+                parameters.Add(ResolveInternal(parameter.ParameterType, resolutionsChain));
+            }
+
+            var instance = constructor.Invoke(parameters.ToArray());
+            if (binding.Scope == Scope.Singleton)
+            {
+                binding.ImplementationObject = instance;
+            }
+            return instance;
         }
-        return instance;
     }
 
     class Binding
