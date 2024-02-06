@@ -7,6 +7,8 @@ public interface IDiContainer
     void Register<TInterface, TImplementation>(Scope scope);
 
     T Resolve<T>();
+
+    T Instantiate<T>(Type type);
 }
 
 public enum Scope

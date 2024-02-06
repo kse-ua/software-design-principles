@@ -22,41 +22,54 @@ public class DiContainer : IDiContainer
     {
         return (T)Resolve(typeof(T));
     }
+
+    public T Instantiate<T>(Type type)
+    {
+        var constructor = type.GetConstructors().First();
+        var parameters = new List<object>();
+        foreach (var parameter in constructor.GetParameters())
+        {
+            parameters.Add(Resolve(parameter.ParameterType));
+        }
+
+        return (T)constructor.Invoke(parameters.ToArray());
+    }
+
     
     public object Resolve(Type type)
     {
-        return ResolveInternal(type, new List<Type>());
-
-        object ResolveInternal(Type interfaceType, List<Type> resolutionsChain)
+        return ResolveInternal(type, type, new List<Type>());
+    }
+    
+    private object ResolveInternal(Type originalType, Type interfaceType, List<Type> resolutionsChain)
+    {
+        var binding = types[interfaceType];
+        if (binding.ImplementationObject != null)
         {
-            var binding = types[interfaceType];
-            if (binding.ImplementationObject != null)
-            {
-                return binding.ImplementationObject;
-            }
-
-            if (resolutionsChain.Contains(interfaceType))
-            {
-                throw new Exception(
-                    $"Cyclic dependency found during resolution of {type}: {string.Join(",", resolutionsChain.Select(t => t.Name))}. " +
-                    $"Got {interfaceType} again");
-            }
-            resolutionsChain.Add(interfaceType);
-
-            var constructor = binding.ImplementationType.GetConstructors().First();
-            var parameters = new List<object>();
-            foreach (var parameter in constructor.GetParameters())
-            {
-                parameters.Add(ResolveInternal(parameter.ParameterType, resolutionsChain));
-            }
-
-            var instance = constructor.Invoke(parameters.ToArray());
-            if (binding.Scope == Scope.Singleton)
-            {
-                binding.ImplementationObject = instance;
-            }
-            return instance;
+            return binding.ImplementationObject;
         }
+
+        if (resolutionsChain.Contains(interfaceType))
+        {
+            throw new Exception(
+                $"Cyclic dependency found during resolution of {originalType}: {string.Join(",", resolutionsChain.Select(t => t.Name))}. " +
+                $"Got {interfaceType} again");
+        }
+        resolutionsChain.Add(interfaceType);
+
+        var constructor = binding.ImplementationType.GetConstructors().First();
+        var parameters = new List<object>();
+        foreach (var parameter in constructor.GetParameters())
+        {
+            parameters.Add(ResolveInternal(originalType, parameter.ParameterType, resolutionsChain));
+        }
+
+        var instance = constructor.Invoke(parameters.ToArray());
+        if (binding.Scope == Scope.Singleton)
+        {
+            binding.ImplementationObject = instance;
+        }
+        return instance;
     }
 
     class Binding

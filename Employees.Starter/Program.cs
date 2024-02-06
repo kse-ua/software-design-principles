@@ -1,7 +1,11 @@
-﻿using Employee.Setup;
+﻿using DI.Core;
+using Employee.Setup;
 using Employees.Domain;
 
-var commandFactory = new CommandFactory(new EmployeeRegistry());
+var diContainer = new DiContainer();
+diContainer.Register<IEmployeeRegistry, EmployeeRegistry>(Scope.Singleton);
+
+var commandFactory = new CommandFactory(diContainer);
 var commands = commandFactory.GetAllCommands();
 while (true)
 {

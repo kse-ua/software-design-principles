@@ -8,6 +8,11 @@ public interface ICommand
     string Description { get; }
 }
 
+public class CommandAttribute : Attribute
+{
+    
+}
+
 public abstract class Command : ICommand
 {
     protected abstract string Module { get; }

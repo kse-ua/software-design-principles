@@ -2,6 +2,7 @@ namespace Employees.Starter;
 
 using Domain;
 
+[Command]
 public class ListEmployeesCommand : Command
 {
     protected override string Module => "employee";
