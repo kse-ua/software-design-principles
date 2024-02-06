@@ -5,8 +5,8 @@ using Employees.Domain;
 var diContainer = new DiContainer();
 diContainer.Register<IEmployeeRegistry, EmployeeRegistry>(Scope.Singleton);
 
-var commandFactory = new CommandFactory(diContainer);
-var commands = commandFactory.GetAllCommands();
+var factory = new InputActionsFactory(diContainer);
+var actions = factory.GetAllActions();
 while (true)
 {
     var input = Console.ReadLine();
@@ -18,11 +18,12 @@ while (true)
 
 bool TryHandle(string input)
 {
-    foreach (var command in commands)
+    foreach (var inputAction in actions)
     {
-        if (command.CanHandle(input))
+        if (inputAction.CanHandle(input))
         {
-            command.Execute(input);
+            var command = inputAction.GetCommand(input);
+            command.Execute();
             return true;
         }
     }

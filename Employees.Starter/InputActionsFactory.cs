@@ -4,32 +4,31 @@ using System.Reflection;
 using DI.Core;
 using Employees.Domain;
 using Employees.Starter;
-using Salaries;
 
-public class CommandFactory : ICommandFactory
+public class InputActionsFactory : IInputCommandFactory
 {
     private readonly IDiContainer diContainer;
 
-    public CommandFactory(IDiContainer diContainer)
+    public InputActionsFactory(IDiContainer diContainer)
     {
         this.diContainer = diContainer;
     }
 
-    public List<ICommand> GetAllCommands()
+    public List<IInputAction> GetAllActions()
     {
         Console.WriteLine(Directory.GetCurrentDirectory());
         var commandTypes = GetAllAssemblies()
             .SelectMany(assembly => assembly.GetTypes())
             .Where(type => !type.IsAbstract)
-            .Where(type => type.GetCustomAttribute(typeof(CommandAttribute)) != null)
-            .Where(type => type.IsAssignableTo(typeof(Command)));
+            .Where(type => type.GetCustomAttribute(typeof(InputActionAttribute)) != null)
+            .Where(type => type.IsAssignableTo(typeof(IInputAction)));
 
-        var result = new List<ICommand>();
+        var result = new List<IInputAction>();
         foreach (var type in commandTypes)
         {
-            result.Add(diContainer.Instantiate<ICommand>(type));
+            result.Add(diContainer.Instantiate<IInputAction>(type));
         }
-        var helpCommand = new HelpCommand(result);
+        var helpCommand = new HelpInputAction(result);
         result.Add(helpCommand);
         return result;
     }

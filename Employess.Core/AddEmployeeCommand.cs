@@ -2,8 +2,8 @@ namespace Employees.Starter;
 
 using Domain;
 
-[Command]
-public class AddEmployeeCommand : Command
+[InputAction]
+public class AddEmployeeInputAction : InputAction<AddEmployeeCommand>
 {
     protected override string Module => "employee";
 
@@ -11,19 +11,36 @@ public class AddEmployeeCommand : Command
     
     protected override string HelpString => "add an employee";
 
+    private readonly IEmployeeRegistry employeeRegistry;
+
+    public AddEmployeeInputAction(IEmployeeRegistry employeeRegistry)
+    {
+        this.employeeRegistry = employeeRegistry;
+    }
+
+    protected override AddEmployeeCommand GetCommandInternal(string[] args)
+    {
+        return new AddEmployeeCommand(employeeRegistry, args[0]);
+    }
+}
+
+[Command]
+public class AddEmployeeCommand : Command
+{
+
+    private readonly string name;
 
     private readonly IEmployeeRegistry registry;
 
-    public AddEmployeeCommand(IEmployeeRegistry registry)
+    public AddEmployeeCommand(IEmployeeRegistry registry, string name)
     {
         this.registry = registry;
+        this.name = name;
     }
 
-    protected override void ExecuteInternal(string[] args)
+    public override void Execute()
     {
-        var name = args[0];
         registry.Add(name);
         Console.WriteLine($"Employee {name} added!");
     }
-
 }

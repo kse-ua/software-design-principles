@@ -1,6 +1,6 @@
 namespace Employees.Starter;
 
-public class HelpCommand : Command
+public class HelpInputAction : InputAction<HelpCommand>
 {
 
     protected override string Module => "help";
@@ -8,15 +8,33 @@ public class HelpCommand : Command
     protected override string Action => "view";
 
     protected override string HelpString => "view help";
+    
+    private readonly List<IInputAction> possibleCommands;
 
-    private readonly List<ICommand> possibleCommands;
-
-    public HelpCommand(List<ICommand> possibleCommands)
+    public HelpInputAction(List<IInputAction> possibleCommands)
     {
         this.possibleCommands = possibleCommands;
     }
 
-    protected override void ExecuteInternal(string[] args)
+
+    protected override HelpCommand GetCommandInternal(string[] args)
+    {
+        return new HelpCommand(possibleCommands);
+    }
+
+}
+
+public class HelpCommand : Command
+{
+    
+    private readonly List<IInputAction> possibleCommands;
+
+    public HelpCommand(List<IInputAction> possibleCommands)
+    {
+        this.possibleCommands = possibleCommands;
+    }
+
+    public override void Execute()
     {
         foreach (var possibleCommand in possibleCommands)
         {
