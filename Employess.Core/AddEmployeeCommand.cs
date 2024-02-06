@@ -7,6 +7,9 @@ public class AddEmployeeCommand : Command
     protected override string Module => "employee";
 
     protected override string Action => "add";
+    
+    protected override string HelpString => "add an employee";
+
 
     private readonly IEmployeeRegistry registry;
 

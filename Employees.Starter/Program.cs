@@ -1,5 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
-using Employee.Setup;
+﻿using Employee.Setup;
 using Employees.Domain;
 
 var commandFactory = new CommandFactory(new EmployeeRegistry());

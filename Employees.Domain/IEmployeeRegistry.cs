@@ -11,6 +11,21 @@ public interface IEmployeeRegistry
 
 public class EmployeeRegistry : IEmployeeRegistry
 {
+    private static EmployeeRegistry instance;
+
+    public static EmployeeRegistry Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = new EmployeeRegistry();
+            }
+
+            return instance;
+        }
+    }
+
     private readonly List<Employee> employees = new List<Employee>();
 
     public Employee Add(string name)

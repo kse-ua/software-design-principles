@@ -10,6 +10,8 @@ public class RemoveEmployeeCommand : Command
 
     private readonly IEmployeeRegistry registry;
 
+    protected override string HelpString => "remove an employee";
+
     public RemoveEmployeeCommand(IEmployeeRegistry registry)
     {
         this.registry = registry;

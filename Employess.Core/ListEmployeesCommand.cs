@@ -9,6 +9,9 @@ public class ListEmployeesCommand : Command
     protected override string Action => "list";
 
     private readonly IEmployeeRegistry registry;
+    
+    protected override string HelpString => "list all employee";
+
 
     public ListEmployeesCommand(IEmployeeRegistry registry)
     {

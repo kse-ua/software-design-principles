@@ -2,6 +2,7 @@ namespace Employee.Setup;
 
 using Employees.Domain;
 using Employees.Starter;
+using Salaries;
 
 public class CommandFactory : ICommandFactory
 {
@@ -14,11 +15,16 @@ public class CommandFactory : ICommandFactory
 
     public List<ICommand> GetAllCommands()
     {
-        return new List<ICommand>()
+        var result = new List<ICommand>()
         {
             new AddEmployeeCommand(employeeRegistry),
             new RemoveEmployeeCommand(employeeRegistry),
             new ListEmployeesCommand(employeeRegistry),
+            new ShowSalaryCommand()
         };
+
+        var helpCommand = new HelpCommand(result);
+        result.Add(helpCommand);
+        return result;
     }
 }
