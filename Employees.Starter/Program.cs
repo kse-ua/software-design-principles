@@ -1,8 +1,12 @@
-﻿using Employee.Setup;
+﻿using DI.Core;
+using Employee.Setup;
 using Employees.Domain;
 
-var commandFactory = new CommandFactory(new EmployeeRegistry());
-var commands = commandFactory.GetAllCommands();
+var diContainer = new DiContainer();
+diContainer.Register<IEmployeeRegistry, EmployeeRegistry>(Scope.Singleton);
+
+var factory = new InputActionsFactory(diContainer);
+var actions = factory.GetAllActions();
 while (true)
 {
     var input = Console.ReadLine();
@@ -14,11 +18,12 @@ while (true)
 
 bool TryHandle(string input)
 {
-    foreach (var command in commands)
+    foreach (var inputAction in actions)
     {
-        if (command.CanHandle(input))
+        if (inputAction.CanHandle(input))
         {
-            command.Execute(input);
+            var command = inputAction.GetCommand(input);
+            command.Execute();
             return true;
         }
     }
