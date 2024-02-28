@@ -6,7 +6,7 @@ The goal of this assignment is to implement a console-based Reversi (Othello) ga
 
 
 ### Task
-1. Implement a Reversi game playable through the command-line interface (CLI). 
+1. Implement a [Reversi](https://en.wikipedia.org/wiki/Reversi) game playable through the command-line interface (CLI). There are lot of places on the internet where you can try playing reversi, e.g. [here](https://cardgames.io/reversi/) or [here](https://www.crazygames.com/game/reversi-online)
 2. The game should adhere to the rules of Reversi, also known as Othello.
 3. Players should be able to make moves by inputting coordinates for their desired move.
 4. The game must support player vs. player (PvP) and player vs. simple bot (PvE) modes.
