@@ -22,11 +22,12 @@ public class RemoveEmployeeInputAction : InputAction<RemoveEmployeeCommand>
     {
         return new RemoveEmployeeCommand(employeeRegistry, args[0]);
     }
+
 }
 
 
 [Command]
-public class RemoveEmployeeCommand : Command
+public class RemoveEmployeeCommand : Command, IReversable
 {
     private string name;
 
@@ -48,5 +49,10 @@ public class RemoveEmployeeCommand : Command
         
         registry.Remove(name);
         Console.WriteLine($"Employee {name} removed!");
+    }
+
+    public ICommand CreateReverseCommand()
+    {
+        return new AddEmployeeCommand(registry, name);
     }
 }

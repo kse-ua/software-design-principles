@@ -25,7 +25,7 @@ public class AddEmployeeInputAction : InputAction<AddEmployeeCommand>
 }
 
 [Command]
-public class AddEmployeeCommand : Command
+public class AddEmployeeCommand : Command, IReversable
 {
 
     private readonly string name;
@@ -42,5 +42,10 @@ public class AddEmployeeCommand : Command
     {
         registry.Add(name);
         Console.WriteLine($"Employee {name} added!");
+    }
+
+    public ICommand CreateReverseCommand()
+    {
+        return new RemoveEmployeeCommand(registry, name);
     }
 }

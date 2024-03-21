@@ -1,6 +1,6 @@
 namespace Employees.Starter;
 
-public interface IInputCommandFactory
+public interface IInputActionsFactory
 {
     List<IInputAction> GetAllActions();
 }

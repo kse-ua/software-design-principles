@@ -1,33 +1,34 @@
-﻿// See https://aka.ms/new-console-template for more information
-using System.Web;
+﻿var a = 8;
 
-var employee = new Employee("Ann", 18);
-PrintConstructorInfo(employee);
-Console.WriteLine($"{HttpUtility.UrlEncode("A+++B")}");
-
-void PrintConstructorInfo(object o)
+foreach (var i in GetSampleEnumaerable())
 {
-    var constructors = o.GetType().GetConstructors();
-    foreach (var constructor in constructors)
-    {
-        Console.WriteLine($"constructor {constructor}");
-        foreach (var parameter in constructor.GetParameters())
-        {
-            Console.WriteLine(parameter);
-        }
+    Console.WriteLine("foreach");
 
-    }
+    Console.WriteLine(i);
 }
 
-public class Employee
+List<int> GetSampleList()
 {
-    public string Name { get; set; }
+    var result = new List<int>();
     
-    public int Age { get; set; }
+    // code
+    result.Add(1);
+    result.Add(2);
+    result.Add(4);
+    result.Add(78);
 
-    public Employee(string name, int age)
-    {
-        Name = name;
-        Age = age;
-    }
+    return result;
+}
+
+IEnumerable<int> GetSampleEnumaerable()
+{
+    yield break;
+    Console.WriteLine("e1");
+    yield return 1;
+    Console.WriteLine("e2");
+    yield return 2;
+    Console.WriteLine("e3");
+    yield return 4;
+    Console.WriteLine("e4");
+    yield return 78;
 }

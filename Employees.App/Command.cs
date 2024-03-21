@@ -6,6 +6,11 @@ public interface ICommand
     
 }
 
+public interface IReversable
+{
+    ICommand CreateReverseCommand();
+}
+
 public abstract class Command : ICommand
 {
 

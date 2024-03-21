@@ -18,6 +18,16 @@ public class DiContainer : IDiContainer
         Register(typeof(TInterface), typeof(TImplementation), scope);
     }
 
+    public void Register<TInterface, TImplementation>(TImplementation implementation)
+        where TImplementation : TInterface
+    {
+        types[typeof(TInterface)] = new Binding()
+        {
+            Scope = Scope.Singleton,
+            ImplementationObject = implementation
+        };
+    }
+
     public T Resolve<T>()
     {
         return (T)Resolve(typeof(T));

@@ -1,9 +1,12 @@
 ﻿using DI.Core;
 using Employee.Setup;
 using Employees.Domain;
+using Employees.Starter;
 
 var diContainer = new DiContainer();
+var lastCommandsQueue = new LastCommandsQueue();
 diContainer.Register<IEmployeeRegistry, EmployeeRegistry>(Scope.Singleton);
+diContainer.Register<ILastCommandsQueue, LastCommandsQueue>(lastCommandsQueue);
 
 var factory = new InputActionsFactory(diContainer);
 var actions = factory.GetAllActions();
@@ -24,6 +27,7 @@ bool TryHandle(string input)
         {
             var command = inputAction.GetCommand(input);
             command.Execute();
+            lastCommandsQueue.AddCommand(command);
             return true;
         }
     }

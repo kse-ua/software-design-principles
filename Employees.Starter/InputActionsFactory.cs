@@ -5,7 +5,7 @@ using DI.Core;
 using Employees.Domain;
 using Employees.Starter;
 
-public class InputActionsFactory : IInputCommandFactory
+public class InputActionsFactory : IInputActionsFactory
 {
     private readonly IDiContainer diContainer;
 
