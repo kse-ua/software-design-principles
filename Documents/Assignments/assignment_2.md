@@ -27,3 +27,8 @@ Maximum points: 10
 - 1 point - extra task
 - 1 point - theoretical answers.
 
+### Learning materials
+There is a lot of confusing materials about MVC on the internet, I recommend to start with original [explanation by Martin Fowler](https://martinfowler.com/eaaDev/uiArchs.html), author of Refactoring book and a short video fragment from [Robert Martin talk](https://youtu.be/Nsjsiz2A9mg?si=CobGPXOk6evh2wEr&t=1893) on a conference.
+
+After this you can read other materials on the internet but be aware that you can find a lot of wrong arrows and ideas.
+
